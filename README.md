@@ -5,7 +5,7 @@ This is a small, simple UDP implant. It works perfectly in windows and linux.
 Compile it in rust with whatever toolchain you want :)
 *The functions kill,panic,terminate do not work on windows YET!
 
-<IMG SRC="https://raw.githubusercontent.com/trickster0/UDPlant/master/implant.png"/>
+<IMG SRC="https://raw.githubusercontent.com/trickster0/UDPlant/master/Implant.png"/>
 
 
 
