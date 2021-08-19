@@ -10,7 +10,7 @@ use std::io::Write;
 fn main() {
     println!("{}","
     ###########################################################################
-    #      UDPlant - UDP implant made by trickster0 from Telspace Systems     #
+    #                  UDPlant - UDP implant made by trickster0               #
     ###########################################################################\r\n".green());
     let mut socket = UdpSocket::bind("0.0.0.0:42303").expect("Socket failed to open.");
     let mut buf = [0;9];
