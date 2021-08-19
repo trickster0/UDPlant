@@ -32,8 +32,6 @@ fn initiate(socket: &mut UdpSocket) {
     #    beacon - this command can set the beacon time. Format is seconds. #
     #    EX: beacon 25                                                     #
     #    terminate - closes the client                                     #
-    #    panic - closes the client and deletes the implant                 #
-    #    Note: when using pipe, dont put spaces before or after it.        #
     #######################################################################");
     while (true) {
         print!("Agent:~$ ");
